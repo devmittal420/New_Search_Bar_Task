@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search bar</title>
+    <style>
+        #products_item{
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .card {
+        width: 200px;
+        border: 0.4px solid silver;
+        padding: 12px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+      }
+    </style>
+</head>
+<body>
+    
+    <div>
+        <input type="search" id="search_input" placeholder="search here">
+    </div>
+    <div>
+        <h1>My Products</h1>
+        <ul id="products_item"></ul>
+    </div>
+    <div id="card_add_list">
+        <h2>Cart List</h2>
+    </div>
+</body>
+
+<script>
+    const input_search = document.getElementById("search_input");
+    const product_list = document.getElementById("products_item");
+    
+
+    // add event listener for enable searching.
+    input_search.addEventListener("input", (event) => {
+    const searchValue = event.target.value.toLowerCase();
+
+    filterProducts = products.filter(product =>
+        product.title.toLowerCase().includes(searchValue)
+    );
+
+    UI_List();
+});
+
+
+    let products = null;
+    let filterProducts = null;
+
+    // call data from API
+    fetch("https://dummyjson.com/products")
+    .then((data) => data.json())
+    .then((data) => {
+        products = data.products;
+        filterProducts = data.products;
+        UI_List();
+    })  
+
+    function UI_List() {
+        product_list.innerHTML="";
+
+        const productFragment = document.createDocumentFragment();
+
+        for (let i = 0; i < filterProducts.length; i++) {
+            const product = filterProducts[i];
+
+            const {title, price, images} = product;
+
+            const liElem = document.createElement("li");
+            liElem.className = "card";
+            
+            
+
+            const imageElem = document.createElement("img");
+            const priceElem = document.createElement("p");
+            const titleElem = document.createElement("p");
+
+            imageElem.src = images[0];
+            imageElem.width = 50;
+            imageElem.height = 50;
+
+            priceElem.innerText = price;
+            titleElem.innerText = title;
+
+            liElem.appendChild(imageElem);
+            liElem.appendChild(priceElem);
+            liElem.appendChild(titleElem);
+
+            productFragment.appendChild(liElem);
+
+            const btn = document.createElement("button");
+            btn.innerText = "Add To Cart";
+            btn.addEventListener("click",()=>{
+                const cart_add = document.createElement("li");
+                cart_add.innerText = `${title},${price}`;
+                card_add_list.appendChild(cart_add);
+                console.log(card_add_list);
+            })
+            
+            liElem.appendChild(btn);
+        }
+        product_list.appendChild(productFragment);
+    }
+
+</script>
+</html>
