@@ -65,25 +65,21 @@
     })  
 
     function UI_List() {
-        product_list.innerHTML="";
 
         const productFragment = document.createDocumentFragment();
-
         for (let i = 0; i < filterProducts.length; i++) {
             const product = filterProducts[i];
 
-            const {title, price, images} = product;
+            const {title, price, thumbnail} = product;
 
             const liElem = document.createElement("li");
             liElem.className = "card";
-            
-            
 
             const imageElem = document.createElement("img");
             const priceElem = document.createElement("p");
             const titleElem = document.createElement("p");
 
-            imageElem.src = images[0];
+            imageElem.src = thumbnail;
             imageElem.width = 50;
             imageElem.height = 50;
 
@@ -93,22 +89,25 @@
             liElem.appendChild(imageElem);
             liElem.appendChild(priceElem);
             liElem.appendChild(titleElem);
-
+            
             productFragment.appendChild(liElem);
 
             const btn = document.createElement("button");
             btn.innerText = "Add To Cart";
+            const cart_add = document.createElement("li");
             btn.addEventListener("click",()=>{
-                const cart_add = document.createElement("li");
-                cart_add.innerText = `${title},${price}`;
+
+                cart_add.innerText = [title,price];
                 card_add_list.appendChild(cart_add);
                 console.log(card_add_list);
             })
             
+            
             liElem.appendChild(btn);
         }
+        product_list.innerHTML="";
         product_list.appendChild(productFragment);
     }
-
 </script>
 </html>
+
